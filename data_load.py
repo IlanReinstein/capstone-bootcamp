@@ -15,7 +15,7 @@ import sql_queries
 def print_postgres_info():
     cloudsql = PostgresHook("cloudsql")
     print(cloudsql)
-    print(cloudsql.run("SELECT 1"))
+    return cloudsql.run("SELECT 1")
 # def load_data_to_cloudsql(*args, **kwargs):
 #     aws_hook = AwsHook("aws_credentials")
 #     credentials = aws_hook.get_credentials()
