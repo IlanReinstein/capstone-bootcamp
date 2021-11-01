@@ -19,10 +19,9 @@ def load_data_to_cloudsql(*args, **kwargs):
 
 upload_gdrive_to_gcs = GoogleDriveToGCSOperator(
     task_id="upload_gdrive_object_to_gcs",
-    folder_id=FOLDER_ID,
-    file_name=FILE_NAME,
-    bucket_name=BUCKET,
-    object_name=OBJECT,
+    folder_id='my-drive',
+    file_name='user-purchase.csv',
+    bucket_name='capstone-ir',
 )
 
 dag = DAG(
