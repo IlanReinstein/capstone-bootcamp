@@ -1,5 +1,5 @@
-create_user_table = """CREATE SCHEMA IF NOT EXISTS purchases_db;
-CREATE TABLE IF NOT EXISTS purchases_db.users_purchases (
+CREATE_USER_PURCHASE_TABLE = """
+CREATE TABLE IF NOT EXISTS purchases.users_purchases (
     invoice_number varchar(10),
     stock_code varchar(20),
     detail varchar(1000),
@@ -20,7 +20,7 @@ IGNOREHEADER 1
 DELIMITER ','
 """
 
-COPY_ALL_TRIPS_SQL = COPY_SQL.format(
+COPY_ALL_USER_PURCHASE_SQL = COPY_SQL.format(
     "user_purchase",
     "gs://capstone-ir"
 )
