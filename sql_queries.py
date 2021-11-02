@@ -12,7 +12,7 @@ CREATE_USER_PURCHASE_TABLE = """
 """
 
 COPY_SQL = """
-    COPY {}
+    \COPY {}
     FROM '{}'
     DELIMITER ','
     CSV HEADER;

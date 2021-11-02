@@ -34,7 +34,6 @@ upload_gdrive_to_gcs = GoogleDriveToGCSOperator(
     bucket_name='capstone-ir',
 )
 
-
 detect_file = GoogleDriveFileExistenceSensor(
         task_id="detect_file",
         folder_id=FOLDER_ID,
