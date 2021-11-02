@@ -56,4 +56,5 @@ copy_task = PythonOperator(
     python_callable=load_data_to_cloudsql
 )
 
-detect_file >> upload_gdrive_to_gcs >> create_table >> copy_task
+# detect_file >> upload_gdrive_to_gcs >> 
+create_table >> copy_task
