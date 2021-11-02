@@ -12,7 +12,7 @@ from airflow.providers.google.suite.sensors.drive import GoogleDriveFileExistenc
 
 import sql_queries
 FOLDER_ID = '1rgBurNjLUqErTcaLx0TB53FNWEsausiJhP9Oa3goJSzlv3_xaAjBD8tPz4ROmSIq96KSHggH'
-FILE_NAME = '1nj2AXJG10DTjSjL0J17WlDdZeunJQ9r6'
+FILE_NAME = 'user_purchase.csv'#'1nj2AXJG10DTjSjL0J17WlDdZeunJQ9r6'
 
 # def print_postgres_info():
 #     cloudsql = PostgresHook("cloudsql")
