@@ -12,9 +12,9 @@ CREATE_USER_PURCHASE_TABLE = """
 """
 
 COPY_SQL = """
-    '\copy {} 
+    \copy {}
     from '{}'
-    with (format csv, header true, delimiter ',');'
+    with (format csv, header true, delimiter ',');
 """
 
 COPY_ALL_USER_PURCHASE_SQL = COPY_SQL.format(
