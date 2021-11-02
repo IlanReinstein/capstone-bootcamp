@@ -10,12 +10,12 @@ CREATE_USER_PURCHASE_TABLE = """
         country varchar(20)
     );
 """
-    # \COPY {}
-    # FROM '{}'
-    # DELIMITER ','
-    # CSV HEADER;
+
 COPY_SQL = """
-    "\copy {} from '{}' with (format csv,header true, delimiter ',');"
+    COPY {}
+    FROM '{}'
+    DELIMITER ','
+    CSV HEADER;
 """
 
 COPY_ALL_USER_PURCHASE_SQL = COPY_SQL.format(

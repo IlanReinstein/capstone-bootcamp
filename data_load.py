@@ -27,19 +27,19 @@ dag = DAG(
     start_date=datetime.datetime.now()
 )
 
-upload_gdrive_to_gcs = GoogleDriveToGCSOperator(
-    task_id="upload_gdrive_to_gcs",
-    folder_id=FOLDER_ID,
-    file_name=FILE_NAME,
-    bucket_name='capstone-ir',
-)
-
-detect_file = GoogleDriveFileExistenceSensor(
-        task_id="detect_file",
-        folder_id=FOLDER_ID,
-        file_name=FILE_NAME,
-        dag = dag
-    )
+# upload_gdrive_to_gcs = GoogleDriveToGCSOperator(
+#     task_id="upload_gdrive_to_gcs",
+#     folder_id=FOLDER_ID,
+#     file_name=FILE_NAME,
+#     bucket_name='capstone-ir',
+# )
+#
+# detect_file = GoogleDriveFileExistenceSensor(
+#     task_id="detect_file",
+#     folder_id=FOLDER_ID,
+#     file_name=FILE_NAME,
+#     dag = dag
+# )
 
 create_table = PostgresOperator(
     task_id="create_table",
