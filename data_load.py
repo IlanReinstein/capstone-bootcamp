@@ -38,7 +38,7 @@ create_table = PostgresOperator(
     task_id="create_table",
     dag=dag,
     postgres_conn_id="gcp",
-    sql=sql_statements.CREATE_USER_PURCHASE_TABLE
+    sql=sql_queries.CREATE_USER_PURCHASE_TABLE
 )
 
 # print_instance = PythonOperator(
