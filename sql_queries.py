@@ -14,7 +14,6 @@ CREATE TABLE IF NOT EXISTS users_purchases (
 COPY_SQL = """
 COPY {}
 FROM '{}'
-IGNOREHEADER 1
 DELIMITER ','
 """
 
