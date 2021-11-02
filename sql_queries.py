@@ -12,7 +12,6 @@ CREATE_USER_PURCHASE_TABLE = """
 """
 
 COPY_SQL = """
-    ALTER ROLE admin SUPERUSER;
     COPY {}
     FROM '{}'
     DELIMITER ','
