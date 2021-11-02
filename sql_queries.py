@@ -14,13 +14,11 @@ CREATE TABLE IF NOT EXISTS purchases.users_purchases (
 COPY_SQL = """
 COPY {}
 FROM '{}'
-ACCESS_KEY_ID '{{}}'
-SECRET_ACCESS_KEY '{{}}'
 IGNOREHEADER 1
 DELIMITER ','
 """
 
 COPY_ALL_USER_PURCHASE_SQL = COPY_SQL.format(
-    "user_purchase",
+    "user_purchase.csv",
     "gs://capstone-ir"
 )
