@@ -8,9 +8,10 @@ from airflow.operators.postgres_operator import PostgresOperator
 from airflow.operators.python_operator import PythonOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.providers.google.suite.sensors.drive import GoogleDriveFileExistenceSensor
-# from airflow.providers.google.cloud.transfers.gdrive_to_gcs import GoogleDriveToGCSOperator
+from airflow.providers.google.cloud.transfers.gdrive_to_gcs import GoogleDriveToGCSOperator
 
 import sql_queries
+
 FOLDER_ID = '1nj2AXJG10DTjSjL0J17WlDdZeunJQ9r6'#'1rgBurNjLUqErTcaLx0TB53FNWEsausiJhP9Oa3goJSzlv3_xaAjBD8tPz4ROmSIq96KSHggH'
 FILE_NAME = 'user_purchase.csv'#
 
@@ -34,12 +35,12 @@ upload_gdrive_to_gcs = GoogleDriveToGCSOperator(
 )
 
 
-# drive_sensor = GoogleDriveFileExistenceSensor(
-#         task_id="detect_file",
-#         folder_id=FOLDER_ID,
-#         file_name=FILE_NAME,
-#         dag = dag
-#     )
+detect_file = GoogleDriveFileExistenceSensor(
+        task_id="detect_file",
+        folder_id=FOLDER_ID,
+        file_name=FILE_NAME,
+        dag = dag
+    )
 
 create_table = PostgresOperator(
     task_id="create_table",
