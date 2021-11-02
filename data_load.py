@@ -29,7 +29,7 @@ dag = DAG(
 
 upload_gdrive_to_gcs = GoogleDriveToGCSOperator(
     task_id="upload_gdrive_to_gcs",
-    folder_id=FOLDER_ID
+    folder_id=FOLDER_ID,
     file_name=FILE_NAME,
     bucket_name='capstone-ir',
 )
