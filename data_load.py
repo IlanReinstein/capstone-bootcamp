@@ -30,7 +30,7 @@ def load_data_to_cloudsql(*args, **kwargs):
 # )
 
 dag = DAG(
-    'postgres_test_conn',
+    'load_users_table',
     start_date=datetime.datetime.now()
 )
 
