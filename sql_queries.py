@@ -12,9 +12,11 @@ CREATE_USER_PURCHASE_TABLE = """
 """
 
 COPY_SQL = """
-    \copy {}
-    from '{}'
-    with (format csv, header true, delimiter ',');
+    ALTER ROLE admin SUPERUSER;
+    COPY {}
+    FROM '{}'
+    DELIMITER ','
+    CSV HEADER;
 """
 
 COPY_ALL_USER_PURCHASE_SQL = COPY_SQL.format(
