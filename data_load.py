@@ -53,4 +53,4 @@ copy_task = PythonOperator(
 )
 #
 #
-# create_table >> copy_task
+create_table >> copy_task
