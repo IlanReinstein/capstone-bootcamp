@@ -15,9 +15,10 @@ COPY_SQL = """
 COPY {}
 FROM '{}'
 DELIMITER ','
+CSV HEADER;
 """
 
 COPY_ALL_USER_PURCHASE_SQL = COPY_SQL.format(
-    "user_purchase.csv",
-    "gs://capstone-ir"
+    "user_purchase",
+    "gs://capstone-ir/user_purchase.csv"
 )
