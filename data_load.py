@@ -37,7 +37,7 @@ dag = DAG(
 create_table = PostgresOperator(
     task_id="create_table",
     dag=dag,
-    postgres_conn_id="gcp",
+    postgres_conn_id="cloudsql",
     sql=sql_queries.CREATE_USER_PURCHASE_TABLE
 )
 
