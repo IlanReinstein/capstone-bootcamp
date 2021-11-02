@@ -50,11 +50,12 @@ create_table = PostgresOperator(
 )
 
 
-copy_task = PythonOperator(
+copy_task = PostgresOperator(
     task_id='load_from_gcs_to_cloudsql',
     dag=dag,
-    python_callable=load_data_to_cloudsql
+    postgres_conn_id="cloudsql",
+    sql=sql_queries.COPY_ALL_USER_PURCHASE_SQL
 )
 
-# detect_file >> upload_gdrive_to_gcs >> 
+# detect_file >> upload_gdrive_to_gcs >>
 create_table >> copy_task
