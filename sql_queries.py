@@ -1,5 +1,5 @@
 CREATE_USER_PURCHASE_TABLE = """
-CREATE TABLE IF NOT EXISTS purchases.users_purchases (
+CREATE TABLE IF NOT EXISTS users_purchases (
     invoice_number varchar(10),
     stock_code varchar(20),
     detail varchar(1000),
