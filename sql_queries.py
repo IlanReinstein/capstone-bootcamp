@@ -7,8 +7,8 @@ CREATE TABLE IF NOT EXISTS purchases.users_purchases (
     invoice_date timestamp,
     unit_price numeric(8, 3),
     customer_id int,
-    country varchar(20);
-)
+    country varchar(20)
+);
 """
 
 COPY_SQL = """
