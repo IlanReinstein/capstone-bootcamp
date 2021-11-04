@@ -22,7 +22,8 @@ def load_csv(*args, **kwargs):
     # table = pd.read_csv('gs://capstone-ir/user_purchase.csv')
     # records = table.to_records(index=False).tolist()
     redshift_hook = PostgresHook("cloudsql")
-    redshift_hook.copy_expert(sql_queries.COPY_ALL_USER_PURCHASE_SQL)
+    buf = io.StringIO()
+    redshift_hook.copy_expert(sql_queries.COPY_ALL_USER_PURCHASE_SQL, buf)
 
 # def copy_from_stringio(conn, df, table):
 #     """
