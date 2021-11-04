@@ -19,12 +19,25 @@ import sql_queries
 
 
 def load_csv(*args, **kwargs):
-    # table = pd.read_csv('gs://capstone-ir/user_purchase.csv')
-    # records = table.to_records(index=False).tolist()
-    redshift_hook = PostgresHook("cloudsql")
-    # buffer = StringIO()
-    # df.to_csv(buffer, index_label='id', header=False)
-    redshift_hook.bulk_load('user_purchase', "gs://capstone-ir/user_purchase.csv")
+    df = pd.read_csv('gs://capstone-ir/user_purchase.csv')
+    table = 'user_purchase'
+    cloudsql_hook = PostgresHook("cloudsql")
+    buffer = StringIO()
+    df.to_csv(buffer, header=False)
+    buffer.seek(0)
+    conn = cloudsql_hook.get_conn()
+    cursor = conn.cursor()
+    try:
+        cursor.copy_from(buffer, table, sep=",")
+        conn.commit()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print("Error: %s" % error)
+        conn.rollback()
+        cursor.close()
+        return 1
+    print("copy_from_stringio() done")
+    cursor.close()
+
 
 # def copy_from_stringio(conn, df, table):
 #     """
@@ -76,7 +89,7 @@ create_table = PostgresOperator(
 
 
 copy_from_gcs = PythonOperator(
-    task_id='load_csv_to_gcs',
+    task_id='copy_csv_to_cloudsql',
     dag=dag,
     python_callable=load_csv,
 )
