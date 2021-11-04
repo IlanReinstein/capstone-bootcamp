@@ -24,7 +24,7 @@ def load_csv(*args, **kwargs):
     redshift_hook = PostgresHook("cloudsql")
     # buffer = StringIO()
     # df.to_csv(buffer, index_label='id', header=False)
-    redshift_hook.bulk_copy('user_purchase', "gs://capstone-ir/user_purchase.csv")
+    redshift_hook.bulk_load('user_purchase', "gs://capstone-ir/user_purchase.csv")
 
 # def copy_from_stringio(conn, df, table):
 #     """
