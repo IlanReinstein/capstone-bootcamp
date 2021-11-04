@@ -1,5 +1,7 @@
 import datetime
 import logging
+import pandas as pd
+from io import StringIO
 
 from airflow import DAG
 from airflow.contrib.hooks.aws_hook import AwsHook
@@ -12,15 +14,37 @@ from airflow.providers.google.cloud.transfers.gdrive_to_gcs import GoogleDriveTo
 
 import sql_queries
 
-FOLDER_ID = '1nj2AXJG10DTjSjL0J17WlDdZeunJQ9r6'#'1rgBurNjLUqErTcaLx0TB53FNWEsausiJhP9Oa3goJSzlv3_xaAjBD8tPz4ROmSIq96KSHggH'
-FILE_NAME = 'user_purchase.csv'#
+# FOLDER_ID = '1nj2AXJG10DTjSjL0J17WlDdZeunJQ9r6'#'1rgBurNjLUqErTcaLx0TB53FNWEsausiJhP9Oa3goJSzlv3_xaAjBD8tPz4ROmSIq96KSHggH'
+# FILE_NAME = 'user_purchase.csv'#
 
 
-def load_data_to_cloudsql(*args, **kwargs):
-    # aws_hook = AwsHook("aws_credentials")
-    # credentials = aws_hook.get_credentials()
-    cloudsql_hook = PostgresHook("cloudsql")
-    cloudsql_hook.run(sql_queries.COPY_ALL_USER_PURCHASE_SQL)
+def load_csv(*args, **kwargs):
+    # table = pd.read_csv('gs://capstone-ir/user_purchase.csv')
+    # records = table.to_records(index=False).tolist()
+    redshift_hook = PostgresHook("cloudsql")
+    redshift_hook.copy_expert(sql_queries.COPY_ALL_USER_PURCHASE_SQL)
+
+# def copy_from_stringio(conn, df, table):
+#     """
+#     Here we are going save the dataframe in memory
+#     and use copy_from() to copy it to the table
+#     """
+#     # save dataframe to an in memory buffer
+#     buffer = StringIO()
+#     df.to_csv(buffer, index_label='id', header=False)
+#     buffer.seek(0)
+#
+#     cursor = conn.cursor()
+#     try:
+#         cursor.copy_from(buffer, table, sep=",")
+#         conn.commit()
+#     except (Exception, psycopg2.DatabaseError) as error:
+#         print("Error: %s" % error)
+#         conn.rollback()
+#         cursor.close()
+#         return 1
+#     print("copy_from_stringio() done")
+#     cursor.close()
 
 dag = DAG(
     'load_users_table',
@@ -49,12 +73,18 @@ create_table = PostgresOperator(
 )
 
 
-copy_task = PostgresOperator(
-    task_id='load_from_gcs_to_cloudsql',
-    dag=dag,
-    postgres_conn_id="cloudsql",
-    sql=sql_queries.COPY_ALL_USER_PURCHASE_SQL
-)
+# read_gcs_table = PythonOperator(
+#     task_id='load_csv_to_gcs',
+#     dag=dag,
+#     python_callable=load_csv,
+# )
+#
+# copy_task = PostgresOperator(
+#     task_id='load_from_gcs_to_cloudsql',
+#     dag=dag,
+#     postgres_conn_id="cloudsql",
+#     sql=sql_queries.COPY_ALL_USER_PURCHASE_SQL
+# )
 
 # detect_file >> upload_gdrive_to_gcs >>
 create_table >> copy_task
