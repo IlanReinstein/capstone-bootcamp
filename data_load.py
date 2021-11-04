@@ -1,7 +1,7 @@
 import datetime
 import logging
 import pandas as pd
-from io import StringIO
+import io
 
 from airflow import DAG
 from airflow.contrib.hooks.aws_hook import AwsHook
