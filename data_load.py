@@ -73,11 +73,11 @@ create_table = PostgresOperator(
 )
 
 
-# read_gcs_table = PythonOperator(
-#     task_id='load_csv_to_gcs',
-#     dag=dag,
-#     python_callable=load_csv,
-# )
+copy_from_gcs = PythonOperator(
+    task_id='load_csv_to_gcs',
+    dag=dag,
+    python_callable=load_csv,
+)
 #
 # copy_task = PostgresOperator(
 #     task_id='load_from_gcs_to_cloudsql',
@@ -87,4 +87,4 @@ create_table = PostgresOperator(
 # )
 
 # detect_file >> upload_gdrive_to_gcs >>
-create_table >> copy_task
+create_table >> copy_from_gcs
