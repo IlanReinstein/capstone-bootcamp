@@ -76,5 +76,5 @@ delete_downloaded_file = PythonOperator(
     dag=dag,
     python_callable=delete_file,
 )
-
-download_file >> create_table >> copy_from_gcs >> delete_downloaded_file
+# >> copy_from_gcs
+download_file >> create_table  >> delete_downloaded_file
