@@ -27,9 +27,9 @@ def load_csv(*args, **kwargs):
     cloudsql_hook = PostgresHook(postgres_conn_id="cloudsql")
     conn = cloudsql_hook.get_conn()
     cursor = conn.cursor()
-    fpath = '~/user_purchase.csv'
+    fpath = 'user_purchase.csv'
 
-    with open('~/user_purchase.csv', "r") as f:
+    with open('user_purchase.csv', "r") as f:
         next(f)
         curr.copy_from(f, table, sep=",")
         conn.commit()
@@ -56,7 +56,7 @@ download_file = GCSToLocalFilesystemOperator(
     task_id="download_file",
     object_name='user_purchase.csv',
     bucket='ir-raw-data',
-    filename=file_path('user_purchase.csv')
+    filename='user_purchase.csv'
 )
 
 create_table = PostgresOperator(
