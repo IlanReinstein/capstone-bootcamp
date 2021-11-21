@@ -5,26 +5,30 @@ import psycopg2
 import io
 
 from airflow import DAG
-from airflow.contrib.hooks.aws_hook import AwsHook
 from airflow.hooks.postgres_hook import PostgresHook
 from airflow.operators.postgres_operator import PostgresOperator
 from airflow.operators.python_operator import PythonOperator
-from airflow.operators.dummy_operator import DummyOperator
-from airflow.providers.google.suite.sensors.drive import GoogleDriveFileExistenceSensor
-from airflow.providers.google.cloud.transfers.gdrive_to_gcs import GoogleDriveToGCSOperator
+from airflow.providers.google.cloud.transfers.gcs_to_local import GCSToLocalFilesystemOperator
 
 import sql_queries
 
 # FOLDER_ID = '1nj2AXJG10DTjSjL0J17WlDdZeunJQ9r6'#'1rgBurNjLUqErTcaLx0TB53FNWEsausiJhP9Oa3goJSzlv3_xaAjBD8tPz4ROmSIq96KSHggH'
 # FILE_NAME = 'user_purchase.csv'#
 
+def download_file(*args, **kwargs):
+    GCSToLocalFilesystemOperator(
+        task_id="download_file",
+        object_name='gs://ir-raw-data/user_purchase.csv',
+        bucket='ir-raw-data',
+        filename='~/user_purchase.csv'
+    )
 
 def load_csv(*args, **kwargs):
     table = 'user_purchase'
     cloudsql_hook = PostgresHook(postgres_conn_id="cloudsql")
     conn = cloudsql_hook.get_conn()
     cursor = conn.cursor()
-    fpath = 'gs://ir-raw-data/user_purchase.csv'
+    fpath = '~/user_purchase.csv'
 
     with open(fpath, 'r') as f:
         next(f)
@@ -58,4 +62,4 @@ copy_from_gcs = PythonOperator(
     python_callable=load_csv,
 )
 
-create_table >> copy_from_gcs
+download_file >> create_table >> copy_from_gcs
