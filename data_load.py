@@ -24,7 +24,7 @@ def load_csv(*args, **kwargs):
     # buffer = StringIO()
     # df.to_csv(buffer, header=False)
     # buffer.seek(0)
-    fpath = 'gs://ir-raw-data/user_purchase.csv'
+    fpath = 'https://storage.cloud.google.com/ir-raw-data/user_purchase.csv'
     conn = cloudsql_hook.get_conn()
     cursor = conn.cursor()
     try:
