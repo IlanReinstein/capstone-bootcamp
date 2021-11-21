@@ -2,7 +2,7 @@ import datetime
 import logging
 import pandas as pd
 import psycopg2
-import io
+import os
 
 from airflow import DAG
 from airflow.hooks.postgres_hook import PostgresHook
