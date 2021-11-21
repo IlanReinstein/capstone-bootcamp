@@ -22,7 +22,7 @@ def load_csv(*args, **kwargs):
     cloudsql_hook = PostgresHook(postgres_conn_id="cloudsql")
     conn = cloudsql_hook.get_conn()
     cursor = conn.cursor()
-    fpath = '~/user_purchase.csv'
+    fpath = 'user_purchase.csv'
 
     with open(fpath, 'r') as f:
         next(f)
@@ -43,12 +43,12 @@ dag = DAG(
 )
 
 download_file = GCSToLocalFilesystemOperator(
-        dag=dag,
-        task_id="download_file",
-        object_name='gs://ir-raw-data/user_purchase.csv',
-        bucket='ir-raw-data',
-        filename='~/user_purchase.csv'
-    )
+    dag=dag,
+    task_id="download_file",
+    object_name='gs://ir-raw-data/user_purchase.csv',
+    bucket='ir-raw-data',
+    filename='user_purchase.csv'
+)
 
 create_table = PostgresOperator(
     task_id="create_table",
