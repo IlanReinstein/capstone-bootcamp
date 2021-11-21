@@ -1,6 +1,7 @@
 import datetime
 import logging
 import pandas as pd
+import psycopg2
 import io
 
 from airflow import DAG
@@ -20,44 +21,28 @@ import sql_queries
 
 def load_csv(*args, **kwargs):
     table = 'user_purchase'
-    cloudsql_hook = PostgresHook("cloudsql")
-    # buffer = StringIO()
-    # df.to_csv(buffer, header=False)
-    # buffer.seek(0)
-    fpath = 'https://storage.cloud.google.com/ir-raw-data/user_purchase.csv'
+    cloudsql_hook = PostgresHook(postgres_conn_id="cloudsql")
     conn = cloudsql_hook.get_conn()
     cursor = conn.cursor()
-    try:
-        with open(fpath, 'r') as f:
-            next(f)
-            cursor.copy_from(buffer, table, sep=",")
-            conn.commit()
-    except (Exception, psycopg2.DatabaseError) as error:
-        print("Error: %s" % error)
-        conn.rollback()
-        cursor.close()
-        return 1
-    print("loading csv done")
-    cursor.close()
+    fpath = 'gs://ir-raw-data/user_purchase.csv'
+    print(pd.read_csv(fpath).head())
+    # with open(fpath, 'r') as f:
+    #         next(f)
+    #         cursor.copy_from(buffer, table, sep=",")
+    #         conn.commit()
+    #
+    # # CSV loading to table
+    # with open(file_path("cities_clean.csv"), "r") as f:
+    #     next(f)
+    #     curr.copy_from(f, 'cities', sep=",")
+    #     get_postgres_conn.commit()
+    # print("loading csv done")
+    # cursor.close()
 
 dag = DAG(
     'load_users_table',
     start_date=datetime.datetime.now()
 )
-
-# upload_gdrive_to_gcs = GoogleDriveToGCSOperator(
-#     task_id="upload_gdrive_to_gcs",
-#     folder_id=FOLDER_ID,
-#     file_name=FILE_NAME,
-#     bucket_name='capstone-ir',
-# )
-#
-# detect_file = GoogleDriveFileExistenceSensor(
-#     task_id="detect_file",
-#     folder_id=FOLDER_ID,
-#     file_name=FILE_NAME,
-#     dag = dag
-# )
 
 create_table = PostgresOperator(
     task_id="create_table",
