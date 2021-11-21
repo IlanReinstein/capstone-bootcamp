@@ -15,13 +15,7 @@ import sql_queries
 # FOLDER_ID = '1nj2AXJG10DTjSjL0J17WlDdZeunJQ9r6'#'1rgBurNjLUqErTcaLx0TB53FNWEsausiJhP9Oa3goJSzlv3_xaAjBD8tPz4ROmSIq96KSHggH'
 # FILE_NAME = 'user_purchase.csv'#
 
-def download_file(*args, **kwargs):
-    GCSToLocalFilesystemOperator(
-        task_id="download_file",
-        object_name='gs://ir-raw-data/user_purchase.csv',
-        bucket='ir-raw-data',
-        filename='~/user_purchase.csv'
-    )
+
 
 def load_csv(*args, **kwargs):
     table = 'user_purchase'
@@ -47,6 +41,14 @@ dag = DAG(
     'load_users_table',
     start_date=datetime.datetime.now()
 )
+
+download_file = GCSToLocalFilesystemOperator(
+        dag=dag,
+        task_id="download_file",
+        object_name='gs://ir-raw-data/user_purchase.csv',
+        bucket='ir-raw-data',
+        filename='~/user_purchase.csv'
+    )
 
 create_table = PostgresOperator(
     task_id="create_table",
