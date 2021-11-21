@@ -16,11 +16,9 @@ import sql_queries
 # FILE_NAME = 'user_purchase.csv'#
 
 
-def file_path(relative_path):
-    dir = os.path.dirname(os.path.abspath(__file__))
-    split_path = relative_path.split("/")
-    new_path = os.path.join(dir, *split_path)
-    return new_path
+
+def delete_file():
+    os.remove("user_purchase.csv")
 
 def load_csv(*args, **kwargs):
     table = 'user_purchase'
@@ -73,4 +71,10 @@ copy_from_gcs = PythonOperator(
     python_callable=load_csv,
 )
 
-download_file >> create_table >> copy_from_gcs
+delete_downloaded_file = PythonOperator(
+    task_id='delete_csv_file',
+    dag=dag,
+    python_callable=delete_file,
+)
+
+download_file >> create_table >> copy_from_gcs >> delete_downloaded_file
