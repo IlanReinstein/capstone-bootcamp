@@ -25,11 +25,11 @@ def load_csv(*args, **kwargs):
     conn = cloudsql_hook.get_conn()
     cursor = conn.cursor()
     fpath = 'gs://ir-raw-data/user_purchase.csv'
-    print(pd.read_csv(fpath).head())
-    # with open(fpath, 'r') as f:
-    #         next(f)
-    #         cursor.copy_from(buffer, table, sep=",")
-    #         conn.commit()
+
+    with open(fpath, 'r') as f:
+        next(f)
+        cursor.copy_expert("COPY users.user_purchase FROM STDIN WITH CSV HEADER", f)
+        conn.commit()
     #
     # # CSV loading to table
     # with open(file_path("cities_clean.csv"), "r") as f:
