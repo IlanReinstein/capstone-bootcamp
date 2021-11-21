@@ -31,7 +31,7 @@ def load_csv(*args, **kwargs):
 
     with open('user_purchase.csv', "r") as f:
         next(f)
-        curr.copy_from(f, table, sep=",")
+        cursor.copy_from(f, table, sep=",")
         conn.commit()
     # with open(fpath, 'r') as f:
     #     next(f)
