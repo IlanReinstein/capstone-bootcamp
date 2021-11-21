@@ -29,7 +29,7 @@ def load_csv(*args, **kwargs):
 
     with open('user_purchase.csv', "r") as f:
         next(f)
-        cursor.copy_from(f, table, sep=",")
+        cursor.copy_expert("COPY user_purchase FROM STDIN WITH CSV HEADER", f)
         conn.commit()
     # with open(fpath, 'r') as f:
     #     next(f)
