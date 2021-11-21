@@ -19,47 +19,26 @@ import sql_queries
 
 
 def load_csv(*args, **kwargs):
-    df = pd.read_csv('gs://capstone-ir/user_purchase.csv')
     table = 'user_purchase'
     cloudsql_hook = PostgresHook("cloudsql")
-    buffer = StringIO()
-    df.to_csv(buffer, header=False)
-    buffer.seek(0)
+    # buffer = StringIO()
+    # df.to_csv(buffer, header=False)
+    # buffer.seek(0)
+    fpath = 'gs://ir-raw-data/user_purchase.csv'
     conn = cloudsql_hook.get_conn()
     cursor = conn.cursor()
     try:
-        cursor.copy_from(buffer, table, sep=",")
-        conn.commit()
+        with open(fpath, 'r') as f:
+            next(f)
+            cursor.copy_from(buffer, table, sep=",")
+            conn.commit()
     except (Exception, psycopg2.DatabaseError) as error:
         print("Error: %s" % error)
         conn.rollback()
         cursor.close()
         return 1
-    print("copy_from_stringio() done")
+    print("loading csv done")
     cursor.close()
-
-
-# def copy_from_stringio(conn, df, table):
-#     """
-#     Here we are going save the dataframe in memory
-#     and use copy_from() to copy it to the table
-#     """
-#     # save dataframe to an in memory buffer
-#     buffer = StringIO()
-#     df.to_csv(buffer, index_label='id', header=False)
-#     buffer.seek(0)
-#
-#     cursor = conn.cursor()
-#     try:
-#         cursor.copy_from(buffer, table, sep=",")
-#         conn.commit()
-#     except (Exception, psycopg2.DatabaseError) as error:
-#         print("Error: %s" % error)
-#         conn.rollback()
-#         cursor.close()
-#         return 1
-#     print("copy_from_stringio() done")
-#     cursor.close()
 
 dag = DAG(
     'load_users_table',
@@ -93,13 +72,5 @@ copy_from_gcs = PythonOperator(
     dag=dag,
     python_callable=load_csv,
 )
-#
-# copy_task = PostgresOperator(
-#     task_id='load_from_gcs_to_cloudsql',
-#     dag=dag,
-#     postgres_conn_id="cloudsql",
-#     sql=sql_queries.COPY_ALL_USER_PURCHASE_SQL
-# )
 
-# detect_file >> upload_gdrive_to_gcs >>
 create_table >> copy_from_gcs
