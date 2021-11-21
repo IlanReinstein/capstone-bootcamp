@@ -27,9 +27,9 @@ def load_csv(*args, **kwargs):
     cloudsql_hook = PostgresHook(postgres_conn_id="cloudsql")
     conn = cloudsql_hook.get_conn()
     cursor = conn.cursor()
-    fpath = 'user_purchase.csv'
+    fpath = '~/user_purchase.csv'
 
-    with open('user_purchase.csv', "r") as f:
+    with open('~/user_purchase.csv', "r") as f:
         next(f)
         curr.copy_from(f, table, sep=",")
         conn.commit()
